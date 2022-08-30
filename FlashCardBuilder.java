@@ -44,6 +44,9 @@ public class FlashCardBuilder {
         aJScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         JButton nextButton = new JButton("Next Card");
+        cardList = new ArrayList<FlashCard>();
+
+
 
         //Create label
         JLabel qLabel = new JLabel("Question");
@@ -100,9 +103,19 @@ public class FlashCardBuilder {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println("button clicked");
+            FlashCard flashCard =  new FlashCard(question.getText(),answer.getText());
+            cardList.add(flashCard);
+            clearCard();
+
 
         }
+    }
+    // Clear the textArea and focus on the question
+    private void clearCard() {
+        question.setText("");
+        answer.setText("");
+        question.requestFocus();
+
     }
 
     class NewMenuListener implements ActionListener {
