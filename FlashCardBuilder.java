@@ -2,7 +2,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class FlashCardBuilder {
 
@@ -111,12 +115,7 @@ public class FlashCardBuilder {
         }
     }
     // Clear the textArea and focus on the question
-    private void clearCard() {
-        question.setText("");
-        answer.setText("");
-        question.requestFocus();
 
-    }
 
     class NewMenuListener implements ActionListener {
 
@@ -133,8 +132,53 @@ public class FlashCardBuilder {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println("Save clicked");
+            FlashCard card = new FlashCard(question.getText(), answer.getText());
+            cardList.add(card);
+
+            //Create file dialog
+            JFileChooser fileSave = new JFileChooser();
+            fileSave.showSaveDialog(frame);
+            saveFile(fileSave.getSelectedFile());
+
         }
+
+
+    }
+
+    private void clearCard() {
+        question.setText("");
+        answer.setText("");
+        question.requestFocus();
+
+    }
+
+    private void saveFile(File selectedFile) {
+
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(selectedFile));
+
+            Iterator<FlashCard>  cardIterator = cardList.iterator();
+            while(cardIterator.hasNext()){
+
+                FlashCard card = (FlashCard)cardIterator.next();
+                writer.write(card.getQuestion() + "/" );
+                writer.write(card.getAnswer() + "\n");
+
+
+
+            }
+            writer.close();
+
+        } catch (Exception e) {
+            System.out.println("Couldn't write to file");
+            e.printStackTrace();
+
+        }
+
+
+
+
+
     }
 
 }
